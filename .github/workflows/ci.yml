@@ -40,5 +40,5 @@ jobs:
         with:
           token: ${{ secrets.codecov_token }}
           slug: VinokurYurii/helpful_utilities_be
-      - name: Run tests1
+      - name: Run tests
         run: bin/rake
