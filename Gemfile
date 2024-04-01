@@ -18,6 +18,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri windows]
   gem 'rspec-rails'
   gem 'rubocop'
+  gem 'panolint', '~> 0.1.6'
   gem 'simplecov'
 end
 
