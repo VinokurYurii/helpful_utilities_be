@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class UsersController < ApplicationController
+  class UsersController < Api::ApplicationController
     def index
       render json: User.all
     end
