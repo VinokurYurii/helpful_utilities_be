@@ -16,6 +16,7 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 group :development, :test do
   gem 'codecov', require: false
   gem 'debug', platforms: %i[mri windows]
+  gem 'panolint', '~> 0.1.6'
   gem 'rspec-rails'
   gem 'rubocop'
   gem 'simplecov'

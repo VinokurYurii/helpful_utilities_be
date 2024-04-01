@@ -12,23 +12,33 @@ jobs:
         os: [ubuntu-latest]
         ruby:
           - 3.1.4
+    services:
+      postgres:
+        image: postgres:11-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: rails_test
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
     runs-on: ${{ matrix.os }}
     env:
-      SOME_ENV_PARAM: olo12
+      RAILS_ENV: test
+      DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+      - name: Lint Ruby files
+        run: bundle exec rubocop --parallel --config .rubocop.yml
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.codecov_token }}
           slug: VinokurYurii/helpful_utilities_be
-      - name: Run tests1
+      - name: Run tests
         run: bin/rake
-      - name: Lint Ruby files
-        run: bin/rubocop --parallel
