@@ -27,7 +27,7 @@ jobs:
       DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
     steps:
       - name: Lint Ruby files
-        run: rubocop --parallel
+        run: bundle exec rubocop --parallel
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Set up Ruby
