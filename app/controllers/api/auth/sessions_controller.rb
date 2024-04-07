@@ -3,37 +3,47 @@
 module Api
   module Auth
     class SessionsController < Devise::SessionsController
-      # respond_to :json
+      # skip_before_action :set_user_by_token, only: [:create, :edit, :update]
+      respond_to :json
 
-      def create
-        super
-        # self.resource = warden.authenticate!(auth_options)
-        # set_flash_message!(:notice, :signed_in)
-        # sign_in(resource_name, resource)
-        # response.set_cookie(
-        #   "SomeName",
-        #   value: session.access_token,
-        #   path: '/',
-        #   domain: "localhost",
-        #   expires: session.expired_at,
-        #   http_only: false
-        # )
-        #
-        # render json: {user: current_user.to_h}
-      end
-      # def render_create_success
-      #   ::RequestStore.store[:current_user_id] = @resource&.id
-      #   render_resource_data(@resource, root_key: :data, serializer: ::UserDetailedSerializer)
-      # end
       private
 
       def sign_in_params
         params.require(:user).permit(:email, :password)
       end
 
-      # def set_token_cookie(name, session, url)
-      #
-      # end
+      def respond_with(current_user, _opts = {})
+        if resource.persisted?
+          render json: {
+            status: { code: 200, message: 'Signed up successfully.' },
+            data: Api::UserLoginSerializer.new(current_user).to_h
+          }, status: :ok
+        else
+          render json: {
+            status: { code: 401, message: resource.errors.full_messages.to_sentence }
+          }, status: :unprocessable_entity
+        end
+      end
+
+      def respond_to_on_destroy
+        if request.headers['Authorization'].present?
+          jwt_payload = JWT.decode(request.headers['Authorization'].split(' ').last,
+                                   Rails.application.credentials.devise_jwt_secret_key!).first
+          current_user = User.find(jwt_payload['sub'])
+        end
+
+        if current_user
+          render json: {
+            status: 200,
+            message: 'Logged out successfully.'
+          }, status: :ok
+        else
+          render json: {
+            status: 401,
+            message: "Couldn't find an active session."
+          }, status: :unauthorized
+        end
+      end
     end
   end
 end
