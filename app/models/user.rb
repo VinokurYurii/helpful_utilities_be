@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable, :validatable # :recoverable, :rememberable, :validatable
+  include Devise::JWT::RevocationStrategies::JTIMatcher
+
+  devise :database_authenticatable, :registerable, :validatable, :rememberable, :validatable, :jwt_authenticatable,
+         jwt_revocation_strategy: self
 
   validates :email, :first_name, :last_name, presence: true
 end

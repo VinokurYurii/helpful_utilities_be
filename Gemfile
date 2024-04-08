@@ -7,6 +7,7 @@ ruby '3.1.4'
 gem 'active_model_serializers', '~> 0.10.2'
 gem 'bootsnap', require: false
 gem 'devise', '~> 4.9'
+gem 'devise-jwt'
 gem 'dotenv-rails'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
