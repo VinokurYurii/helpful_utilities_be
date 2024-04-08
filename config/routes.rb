@@ -6,7 +6,8 @@ Rails.application.routes.draw do
     sign_out: 'logout',
     registration: 'signup'
   }, controllers: {
-    sessions: 'api/auth/sessions'
+    sessions: 'api/auth/sessions',
+    registrations: 'api/auth/registrations',
   }
   namespace :api, defaults: { format: :json } do
     resources :users

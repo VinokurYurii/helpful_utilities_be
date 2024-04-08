@@ -3,7 +3,7 @@
 module Api
   module Auth
     class SessionsController < Devise::SessionsController
-      # skip_before_action :set_user_by_token, only: [:create, :edit, :update]
+      before_action :authenticate_user!, only: :destroy
       respond_to :json
 
       private
@@ -16,7 +16,7 @@ module Api
         if resource.persisted?
           render json: {
             status: { code: 200, message: 'Signed up successfully.' },
-            data: Api::UserLoginSerializer.new(current_user).to_h
+            data: Api::UserSerializer.new(current_user).to_h
           }, status: :ok
         else
           render json: {
