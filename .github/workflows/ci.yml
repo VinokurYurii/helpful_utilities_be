@@ -38,7 +38,7 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
-          token: ${{ secrets.codecov_token }}
+          token: ${{ credentials.codecov_token }}
           slug: VinokurYurii/helpful_utilities_be
       - name: Run tests
         run: bin/rake
